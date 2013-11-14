@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<!-- Packages to be scanned -->
+	<context:annotation-config />
+	<context:component-scan base-package="org.tutsflow" />
+
+	<!-- Handle static resources -->
+	<mvc:resources mapping="/resource/**" location="/resource/"/>
+
+	<!-- Interceptors -->
+	<mvc:interceptors>
+	
+		<!-- Security interceptor -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+        	<bean class="org.tutsflow.interceptor.SecurityInterceptor" />
+		</mvc:interceptor>
+		
+		<!-- User interceptor -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+        	<bean class="org.tutsflow.interceptor.UserInterceptor" />
+		</mvc:interceptor>
+		
+		<!-- Page Interceptor -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+        	<bean class="org.tutsflow.interceptor.PageInterceptor" />
+		</mvc:interceptor>
+		
+	</mvc:interceptors>
+
+	<!-- Annotation handlers -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" />
+ 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+
+	<!-- JSTL resolver-->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- Startup Bean -->
+	<bean init-method="start" class="org.tutsflow.startup.ServerStartup"/>
+
+	<!-- I18N -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename">
+			<value>language</value>
+		</property>
+	</bean>
+	
+</beans>  

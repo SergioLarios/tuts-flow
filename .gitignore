@@ -1,6 +1,37 @@
 *.class
 
-# Package Files #
+#
+# Package Files
+#
+
 *.jar
 *.war
 *.ear
+
+#
+# Eclipse
+#
+
+.project
+.classpath
+/.settings
+
+/tf-web/.project
+/tf-web/.classpath
+/tf-web/.settings
+
+/tf-data/.project
+/tf-data/.classpath
+/tf-data/.settings
+
+/tf-util/.project
+/tf-util/.classpath
+/tf-util/.settings
+
+#
+# Maven
+#
+
+/tf-web/target
+/tf-data/target
+/tf-util/target
