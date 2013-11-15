@@ -104,8 +104,10 @@ public class CredentialsController {
 	 ****** Setters & Getters ********
 	 ******************************* */
 	
-	public CreateAccountFormValidator getCreateAccountFormValidator() { return createAccountFormValidator; }
-	public void setCreateAccountFormValidator(CreateAccountFormValidator createAccountFormValidator) { 
+	public CreateAccountFormValidator getCreateAccountFormValidator() { 
+		return createAccountFormValidator; }
+	public void setCreateAccountFormValidator(
+			CreateAccountFormValidator createAccountFormValidator) { 
 		this.createAccountFormValidator = createAccountFormValidator;
 	}
 

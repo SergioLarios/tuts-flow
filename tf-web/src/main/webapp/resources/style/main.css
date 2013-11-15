@@ -1,16 +1,16 @@
-@CHARSET "UTF-8";
+@charset "UTF-8";
 
 /* ****** Imports ****** */
 
-@IMPORT url('/resource/style/restet.css');
-@IMPORT url('/resource/style/thibaut_courouble.css');
+@import url('restet.css');
+@import url('thibaut_courouble.css');
 
 /* ****** Container ******* */
 
 body {
 	font: 13px/20px 'Lucida Grande', Tahoma, Verdana, sans-serif;
 	color: #555860;
-	background: #e6e6e6 url("../img/bg.bmp") 0 0 repeat;
+	background: #e6e6e6 url("../images/bg.bmp") 0 0 repeat;
 }
 
 .container  {

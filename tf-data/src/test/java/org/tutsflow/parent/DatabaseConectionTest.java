@@ -32,14 +32,14 @@ public abstract class DatabaseConectionTest {
 			
 			// Create data source
 			PGSimpleDataSource dataSource = new PGSimpleDataSource();
-			dataSource.setUser("postgres");
+			dataSource.setUser("tutsflow");
 			dataSource.setPassword("root");
 			dataSource.setServerName("localhost");
-			dataSource.setDatabaseName("tu4");
+			dataSource.setDatabaseName("tutsflow");
 			dataSource.setPortNumber(5432);
 			
 			// finally bind the datasoruce
-			ic.bind("java:/comp/env/jdbc/t4u", dataSource);
+			ic.bind("java:/comp/env/jdbc/tutsflow", dataSource);
 			
 		} catch (Exception e) {
 			log.error("Database connection failed", e);

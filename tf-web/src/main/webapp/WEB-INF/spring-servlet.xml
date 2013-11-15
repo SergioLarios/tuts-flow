@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -10,55 +11,117 @@
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-	<!-- Packages to be scanned -->
-	<context:annotation-config />
-	<context:component-scan base-package="org.tutsflow" />
+	<!-- **************************************************************** -->
+	<!--  SPRING RESOURCES				                                  -->
+	<!-- **************************************************************** -->
+	
+	<import resource="classpath:META-INF/application-context.xml"/>
 
-	<!-- Handle static resources -->
-	<mvc:resources mapping="/resource/**" location="/resource/"/>
+	<!-- **************************************************************** -->
+	<!--  RESOURCE FOLDERS CONFIGURATION                                  -->
+	<!--  Dispatcher configuration for serving static resources           -->
+	<!-- **************************************************************** -->
+	
+	<mvc:resources location="/resources/img/" mapping="/images/**" />
+	<mvc:resources location="/resources/style/" mapping="/css/**" />
+	<mvc:resources location="/resources/js/" mapping="/js/**" />
 
-	<!-- Interceptors -->
+	<!-- **************************************************************** -->
+	<!--  INTECEPTORS								                      -->
+	<!--  Spring web filters						                      -->
+	<!-- **************************************************************** -->
+	
 	<mvc:interceptors>
 	
 		<!-- Security interceptor -->
+		
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/images/**"/>
+			<mvc:exclude-mapping path="/css/**"/>
+			<mvc:exclude-mapping path="/js/**"/>
         	<bean class="org.tutsflow.interceptor.SecurityInterceptor" />
 		</mvc:interceptor>
 		
-		<!-- User interceptor -->
+		<!-- Page Interceptor -->
+		
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
-        	<bean class="org.tutsflow.interceptor.UserInterceptor" />
+			<mvc:exclude-mapping path="/images/**"/>
+			<mvc:exclude-mapping path="/css/**"/>
+			<mvc:exclude-mapping path="/js/**"/>
+        	<bean class="org.tutsflow.interceptor.PageInterceptor" />
 		</mvc:interceptor>
 		
-		<!-- Page Interceptor -->
+		<!-- Object Loader interceptor -->
+		
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
-        	<bean class="org.tutsflow.interceptor.PageInterceptor" />
+			<mvc:exclude-mapping path="/images/**"/>
+			<mvc:exclude-mapping path="/css/**"/>
+			<mvc:exclude-mapping path="/js/**"/>
+        	<bean class="org.tutsflow.interceptor.ObjectLoaderInterceptor" />
 		</mvc:interceptor>
 		
 	</mvc:interceptors>
 
-	<!-- Annotation handlers -->
-	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" />
- 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
-
-	<!-- JSTL resolver-->
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/jsp/" />
-		<property name="suffix" value=".jsp" />
-	</bean>
+	<!-- **************************************************************** -->
+	<!--  ANNOTATION HANDLERS						                      -->
+	<!--  Required with the Spring MVC Controllers	                      -->
+	<!-- **************************************************************** -->
 	
-	<!-- Startup Bean -->
+	<bean 
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" />
+ 	<bean 
+ 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+
+	<!-- **************************************************************** -->
+	<!--  ANNOTATION CONFIG							                      -->
+	<!--  Packages to be scanned					                      -->
+	<!-- **************************************************************** -->
+	
+	<context:annotation-config/>
+	<context:component-scan base-package="thymeleafexamples.stsm" />
+	<context:component-scan base-package="org.tutsflow"/>
+
+	<!-- **************************************************************** -->
+	<!--  STARTUP BEANS								                      -->
+	<!--  Beans to be executed when the app starts	                      -->
+	<!-- **************************************************************** -->
+	
 	<bean init-method="start" class="org.tutsflow.startup.ServerStartup"/>
 
-	<!-- I18N -->
-	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+	<!-- **************************************************************** -->
+	<!--  MESSAGE EXTERNALIZATION/INTERNATIONALIZATION                    -->
+	<!--  Standard Spring MessageSource implementation                    -->
+	<!-- **************************************************************** -->
+	
+	<bean id="messageSource" 
+	class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basename">
 			<value>language</value>
 		</property>
+	</bean>
+
+	<!-- **************************************************************** -->
+	<!--  THYMELEAF-SPECIFIC ARTIFACTS                                    -->
+	<!--  TemplateResolver <- TemplateEngine <- ViewResolver              -->
+	<!-- **************************************************************** -->
+
+	<bean id="templateResolver" 
+		class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+		<property name="prefix" value="/WEB-INF/templates/" />
+		<property name="suffix" value=".xhtml" />
+		<property name="templateMode" value="HTML5" />
+	</bean>
+
+	<bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
+		<property name="templateResolver" ref="templateResolver" />
+	</bean>
+
+	<bean class="org.thymeleaf.spring3.view.ThymeleafViewResolver">
+
+		<property name="templateEngine" ref="templateEngine" />
 	</bean>
 	
 </beans>  

@@ -2,7 +2,7 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
       version="3.0"> 
-	<display-name>Tuts 4 You</display-name>
+	<display-name>TutsFlow</display-name>
 
 	<!-- Spring Servlet -->
 	<servlet>
@@ -16,23 +16,12 @@
 		<servlet-name>spring</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-
-	<!-- Application context path -->
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:META-INF/application-context.xml</param-value>
-	</context-param> 
-
+	
 	<!-- Spring Log4j -->
 	<context-param>
 	    <param-name>log4jConfigLocation</param-name>
 	    <param-value>/WEB-INF/log4j.xml</param-value>
 	</context-param>
-
-	<!-- Context initialization -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
 
 	<!-- Log4j Listener, Srping -->
 	<listener>
@@ -54,7 +43,7 @@
 	<!-- JNDI Connection -->
 	<resource-ref>
 		<description>DB Connection</description>
-		<res-ref-name>jdbc/t4u</res-ref-name>
+		<res-ref-name>jdbc/tutsflow</res-ref-name>
 		<res-type>javax.sql.DataSource</res-type>
 		<res-auth>Container</res-auth>
 		<res-sharing-scope>Shareable</res-sharing-scope>

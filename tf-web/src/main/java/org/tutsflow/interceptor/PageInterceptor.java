@@ -8,6 +8,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.tutsflow.constant.Constants;
 import org.tutsflow.constant.Mappings;
+import org.tutsflow.constant.StringPool;
 import org.tutsflow.session.Page;
 
 public class PageInterceptor implements HandlerInterceptor {
@@ -21,7 +22,13 @@ public class PageInterceptor implements HandlerInterceptor {
 		
 		HttpSession session = request.getSession();
 		
+		String conPath = request.getContextPath();
 		String uri = request.getRequestURI();
+		
+		if (conPath != StringPool.SLASH) {
+			uri = uri.replace(conPath, StringPool.BLANK);
+		}
+		
 		Page page = new Page();
 		if (uri.equals(Mappings.HOME)){
 			page.setType(Page.HOME);

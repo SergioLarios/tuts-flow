@@ -1,0 +1,90 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+	<head th:fragment="html-head">
+	
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		
+		<!-- *** CSS List *** -->
+		
+		<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+		
+		<!-- *** JS List *** -->
+		
+		<script type="text/javascript" th:src="@{/js/main.js}"></script>
+		
+		<!-- *** Title *** -->
+		
+		<title th:text="${view.title}"/>
+		
+	</head>
+	
+	<body>
+	
+		<section class="header" th:fragment="header">
+	
+			<!-- *** Logo *** -->
+			
+			<div class="header-logo">
+				<a th:href="@{${T(org.tutsflow.constant.Mappings).HOME}}">
+					<img alt="logo" th:src="@{/images/header/Logo_Tuts4u.png}" />
+				</a>
+			</div>
+		
+			<!-- *** Navigation *** -->
+			
+			<nav class="header-nav">
+				<ul class="nav" th:with="pageType=${session.page.type}">
+
+					<!-- *** Home *** -->		
+					
+					<li th:attr="class=${pageType == 0 ? 'active' : ''}">
+						<a th:href="@{${T(org.tutsflow.constant.Mappings).HOME}}" 
+							th:title="#{menu.home}" th:text="#{menu.home}"/>
+					</li>
+					
+					<!-- *** Explore *** -->
+					
+					<li th:attr="class=${pageType == 1 ? 'active' : ''}">
+						<a th:href="@{${T(org.tutsflow.constant.Mappings).EXPLORE}}" 
+						   th:title="#{menu.explore}" th:text="#{menu.explore}"/>
+					</li>
+					
+					<!-- *** How to *** -->
+					
+					<li th:attr="class=${pageType == 2 ? 'active' : ''}">
+						<a th:href="@{${T(org.tutsflow.constant.Mappings).HOW_TO}}"
+						   th:title="#{menu.how-to}" th:text="#{menu.how-to}"/>
+					</li>
+					
+				</ul>
+			</nav>
+			
+			<!-- *** User box *** -->
+			
+			<div class="user-box" th:with="user=${session.user}"
+				th:utext="${user.type} == 0 ? 
+				#{header.user-guest(
+					@{${T(org.tutsflow.constant.Mappings).LOGIN}},
+					@{${T(org.tutsflow.constant.Mappings).CREATE_ACCOUNT}}
+				)} :
+				#{header.user-logged(
+					${user.userName},
+					@{${T(org.tutsflow.constant.Mappings).LOGOUT}},
+					@{${T(org.tutsflow.constant.Mappings).USER}} +'/' + ${user.userNameSimple}
+				)}"/>		
+			
+			<!-- *** Search Box *** -->
+			
+			<form action="index.html" method="post" class="search">
+				<input type="text" placeholder="Search..." name="q"/>
+			</form>
+	
+			<span class="clear"></span>
+			
+		</section>
+	
+	</body>
+	
+</html>

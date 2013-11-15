@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.tutsflow.constant.Constants;
-import org.tutsflow.constant.Mappings;
 import org.tutsflow.constant.PermissionConstants;
 import org.tutsflow.constant.StringPool;
 import org.tutsflow.constant.UserConstants;
@@ -26,46 +25,50 @@ public class SecurityInterceptor implements HandlerInterceptor {
 	 * ********************** Pre Handle *********************
 	 * *******************************************************/
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+	public boolean preHandle(
+			HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
+		HttpSession session = request.getSession();
 		String requestUri = request.getRequestURI();
+		User user = (User) session.getAttribute(Constants.SESSION_USER);
 		
-		// We don't want to check the resources
-		if (!requestUri.startsWith(Mappings.RESURCE)) {
-			
-			List<Permission> mappingPermissions = permissionLocalService.findByType(PermissionConstants.TYPE_MAPPING);
-			
-			for (Permission permission : mappingPermissions) {
+		List<Permission> mappingPermissions = permissionLocalService.findByType(
+				PermissionConstants.TYPE_MAPPING);
+		
+		// Cheking the current user has permissions to see the page
+		for (Permission permission : mappingPermissions) {
 
-				// If the patter matches and it's not public we'll have to check the security
-				if (checkPattern(requestUri, permission) && !permission.isPublic()) {
+			// If the patter matches and it's not public we'll have to check the security
+			if (checkPattern(requestUri, permission) && !permission.isPublic()) {
+				
+				if (Validator.isNotNull(user) && !(user.getType() == UserConstants.ADMIN)) {
 					
-					HttpSession session = request.getSession();
+					List<Long> usersAllowed = permission.getUserIdList();
 					
-					User user = (User) session.getAttribute(Constants.SESSION_USER);
-					
-					if (Validator.isNotNull(user) && !(user.getType() == UserConstants.ADMIN)) {
-						
-						List<Long> usersAllowed = permission.getUserIdList();
-						
-						// Check if the user is allowed
-						for (Long userId : usersAllowed) {
-							if (user.getUserId() == userId) { return true; }
-						}
-						
-						SpringUtils.sendError(response);
-						return false;
+					// Check if the user is allowed
+					for (Long userId : usersAllowed) {
+						if (user.getUserId() == userId) { return true; }
 					}
-					else if (Validator.isNull(user)) {
-						SpringUtils.sendError(response);
-						return false;
-					}
-
+					
+					SpringUtils.sendError(response);
+					return false;
 				}
-			
+				else if (Validator.isNull(user)) {
+					SpringUtils.sendError(response);
+					return false;
+				}
+
 			}
-			
+		
+		}
+		
+		// Setting the user in the session
+		
+		if (Validator.isNull(user)) {
+			user = new User();
+			user.setType(UserConstants.GUEST);
+			session.setAttribute(Constants.SESSION_USER, user);
 		}
 		
 		return true;

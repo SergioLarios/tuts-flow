@@ -31,8 +31,7 @@ public class LoginFormValidator extends AbstractFormValidator {
 			addError("lf.not-match");
 		}
 		
-	}
-	
+	}	
 	
 	/* *******************************
 	 ************* Spring ************
@@ -46,5 +45,6 @@ public class LoginFormValidator extends AbstractFormValidator {
 	 ******************************* */
 	
 	public UserLocalService getUserLocalService() { return userLocalService; }
-	public void setUserLocalService(UserLocalService userLocalService) { this.userLocalService = userLocalService; }
+	public void setUserLocalService(UserLocalService userLocalService) { 
+		this.userLocalService = userLocalService; }
 }
