@@ -31,7 +31,7 @@ public class UserController {
 		User userProfile = userLocalService.findByUserNameSimple(userName);
 		UserHomeView view = UserControllerHelper.createUserHomeView(request, userProfile);
 		
-		return SpringUtils.createMv(Constants.JSP_USER_HOME, Constants.VIEW, view);
+		return SpringUtils.createMv(Constants.TMPL_USER_HOME, Constants.VIEW, view);
 	}
 	
 	/* *******************************

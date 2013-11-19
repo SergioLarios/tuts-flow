@@ -13,7 +13,6 @@ public class LoginView extends AbstractView {
 	private LoginForm loginForm;
 	private List<String> errors;
 	private boolean valid;
-	private boolean home;
 	private boolean loggedIn;
 	
 	/* *******************************
@@ -28,9 +27,6 @@ public class LoginView extends AbstractView {
 	
 	public boolean isValid() { return valid; }
 	public void setValid(boolean valid) { this.valid = valid; }
-	
-	public boolean isHome() { return home; }
-	public void setHome(boolean home) { this.home = home; }
 	
 	public boolean isLoggedIn() { return loggedIn; }
 	public void setLoggedIn(boolean loggedIn) { this.loggedIn = loggedIn; }

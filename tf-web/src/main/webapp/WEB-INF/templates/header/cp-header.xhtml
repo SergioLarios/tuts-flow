@@ -1,0 +1,57 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+	<head th:fragment="html-head">
+	
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		
+		<!--/* CSS List/* -->
+		
+		<link rel="stylesheet" type="text/css" 
+			th:href="@{http://cdn.alloyui.com/2.0.0/aui-css/css/bootstrap.min.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/control-panel.css}"/>
+		
+		<!--/* JS List/* -->
+		
+		<script type="text/javascript" 
+			th:src="@{http://cdn.alloyui.com/2.0.0/aui/aui-min.js}"></script>
+		
+		<!--/* Title/* -->
+		
+		<title th:text="${view.title}"/>
+		
+	</head>
+	
+	<body>
+	
+		<!--/* Header/* -->
+		
+		<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+			
+			<div class="navbar-inner">
+				<div class="container-fluid">
+					
+					<!--/* Project name/* -->
+							
+					<a th:href="@{${T(org.tutsflow.constant.Mappings).CONTROL_PANEL}}" 
+						class="brand" th:text="#{cp.name}" />
+					
+					<!--/* User name/* -->
+					
+					<div class="nav-collapse collapse">
+						<p class="navbar-text pull-right"  th:utext="
+						   #{cp.logged.in(
+							  ${session.user.userName},
+							  @{${T(org.tutsflow.constant.Mappings).LOGOUT}}
+						   )}" />
+					</div>
+					
+				</div>
+			</div>
+			
+		</div>
+	
+	</body>
+	
+</html>

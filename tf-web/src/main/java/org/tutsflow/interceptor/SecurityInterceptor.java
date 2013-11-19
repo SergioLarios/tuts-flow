@@ -15,6 +15,7 @@ import org.tutsflow.model.Permission;
 import org.tutsflow.model.User;
 import org.tutsflow.util.Validator;
 import org.tutsflow.web.SpringUtils;
+import org.tutsflow.web.UrlUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,11 +31,19 @@ public class SecurityInterceptor implements HandlerInterceptor {
 			throws Exception {
 		
 		HttpSession session = request.getSession();
-		String requestUri = request.getRequestURI();
+		String requestUri = UrlUtils.getUri(request);
 		User user = (User) session.getAttribute(Constants.SESSION_USER);
 		
 		List<Permission> mappingPermissions = permissionLocalService.findByType(
 				PermissionConstants.TYPE_MAPPING);
+		
+		// We'll store the Previous URI just in case we send any errors
+		// to be able to redirect to the uriginal URI
+		// Previous URI
+		String prevUri = (String)session.getAttribute(Constants.SESSION_CURRENT_URI);
+		String crrUri = UrlUtils.getUri(request);
+		session.setAttribute(Constants.SESSION_PREVIOUS_URI, prevUri);
+		session.setAttribute(Constants.SESSION_CURRENT_URI, crrUri);
 		
 		// Cheking the current user has permissions to see the page
 		for (Permission permission : mappingPermissions) {
@@ -99,8 +108,8 @@ public class SecurityInterceptor implements HandlerInterceptor {
 	private boolean checkPattern(String requestUri, Permission permission) {
 		
 		String pattern = StringPool.CARET + permission.getAction();
-		pattern = pattern.replace(StringPool.STAR, StringPool.PERIOD + StringPool.STAR);
-		if (!pattern.endsWith(StringPool.STAR)) { pattern = pattern + StringPool.STAR; }
+		pattern = pattern.replace(StringPool.STAR, ANY);
+		if (!pattern.endsWith(StringPool.STAR)) { pattern = pattern + ANY; }
 		
 		return requestUri.matches(pattern);
 	}
@@ -120,5 +129,11 @@ public class SecurityInterceptor implements HandlerInterceptor {
 	public void setPermissionLocalService( PermissionLocalService permissionLocalService) {
 		this.permissionLocalService = permissionLocalService;
 	}
+	
+	/* *******************************
+	 ******* Private Constants *******
+	 ****************************** */
+	
+	private static final String ANY = StringPool.PERIOD + StringPool.STAR;
 	
 }

@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.tutsflow.constant.Constants;
 import org.tutsflow.constant.Mappings;
+import org.tutsflow.helper.HttpErrorControllerHelper;
 import org.tutsflow.view.HttpErrorView;
 import org.tutsflow.web.SpringUtils;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,7 @@ public class HttpErrorController {
 		
 		HttpErrorView view = new HttpErrorView();
 		
-		return SpringUtils.createMv(Constants.JSP_404, Constants.VIEW, view);
+		return SpringUtils.createMv(Constants.TMPL_404, Constants.VIEW, view);
 	}
 	
 	/* *******************************************************
@@ -32,9 +33,9 @@ public class HttpErrorController {
 	@RequestMapping(value = Mappings.HTTP_403, method = RequestMethod.GET)  
 	public ModelAndView handle403(HttpServletRequest request, HttpServletResponse response) {
 		
-		HttpErrorView view = new HttpErrorView();
+		HttpErrorView view = HttpErrorControllerHelper.createForbiddenPathView();
 		
-		return SpringUtils.createMv(Constants.JSP_403, Constants.VIEW, view);
+		return SpringUtils.createMv(Constants.TMPL_403, Constants.VIEW, view);
 	}
 	
 }

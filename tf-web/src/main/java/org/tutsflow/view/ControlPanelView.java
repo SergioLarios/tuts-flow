@@ -1,20 +1,18 @@
 package org.tutsflow.view;
 
-import org.tutsflow.form.LoginForm;
-
-public class HttpErrorView extends AbstractView {
+public class ControlPanelView extends AbstractView {
 
 	/* *******************************
 	 ********* View fields ***********
 	 ****************************** */
 	
-	private LoginForm loginForm;
-	
+	private String section;
+
 	/* *******************************
 	 ****** Setters & Getters ********
 	 ******************************* */
 	
-	public LoginForm getLoginForm() { return loginForm; }
-	public void setLoginForm(LoginForm loginForm) { this.loginForm = loginForm; }
+	public String getSection() { return section; }
+	public void setSection(String section) { this.section = section; }
 	
 }

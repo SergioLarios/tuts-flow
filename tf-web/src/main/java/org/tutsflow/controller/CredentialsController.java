@@ -36,7 +36,7 @@ public class CredentialsController {
 		
 		LoginView view = CredentialsControllerHelper.createLoginView(null, null, request, null);
 		
-		return SpringUtils.createMv(Constants.JSP_LOGIN, Constants.VIEW, view);
+		return SpringUtils.createMv(Constants.TMPL_LOGIN, Constants.VIEW, view);
 	}
 	
 	@RequestMapping(value = Mappings.LOGIN, method = RequestMethod.POST)  
@@ -46,7 +46,12 @@ public class CredentialsController {
 		LoginView view = CredentialsControllerHelper.createLoginView(
 				loginForm, loginFormValidator, request, userLocalService);
 		
-		return SpringUtils.createMv(Constants.JSP_LOGIN, Constants.VIEW, view);
+		if (view.isLoggedIn() && loginForm.isRedirect()) {
+			return SpringUtils.createRedirect(loginForm.getPrevUri());
+		}
+		else {
+			return SpringUtils.createMv(Constants.TMPL_LOGIN, Constants.VIEW, view);
+		}
 	}
 	
 	/* *******************************************************
@@ -59,7 +64,7 @@ public class CredentialsController {
 		CreateAccountView view = CredentialsControllerHelper.createCreateAccountView(
 				null, null, request, null);
 		
-		return SpringUtils.createMv(Constants.JSP_CREATE_ACCOUNT, Constants.VIEW, view);
+		return SpringUtils.createMv(Constants.TMPL_CREATE_ACCOUNT, Constants.VIEW, view);
 	}
 	
 	@RequestMapping(value = Mappings.CREATE_ACCOUNT, method = RequestMethod.POST)  
@@ -69,7 +74,7 @@ public class CredentialsController {
 		CreateAccountView view = CredentialsControllerHelper.createCreateAccountView(
 				form, createAccountFormValidator,request, userLocalService);
 		
-		return SpringUtils.createMv(Constants.JSP_CREATE_ACCOUNT, Constants.VIEW, view);
+		return SpringUtils.createMv(Constants.TMPL_CREATE_ACCOUNT, Constants.VIEW, view);
 	}
 	
 	/* *******************************************************

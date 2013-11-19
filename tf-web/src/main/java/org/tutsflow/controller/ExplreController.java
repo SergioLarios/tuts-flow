@@ -25,7 +25,7 @@ public class ExplreController {
 		ExploreView view = new ExploreView();
 		view.setExplore(true);
 		
-		return SpringUtils.createMv(Constants.JSP_EXPLORE, Constants.VIEW, view);
+		return SpringUtils.createMv(Constants.TMPL_EXPLORE, Constants.VIEW, view);
 	}
 	
 }

@@ -9,7 +9,21 @@
 	
 		<section th:replace="header/basic-header :: header"/>
 	
-		<h1>ERROR 403</h1>
+		<section class="container">
+
+			<!--/* Content/* -->
+			
+			<div class="content-wrapper">
+				
+				<!--/* Login /* -->
+				
+				<div class="box">
+					<div th:replace="include/credentials :: login" />
+				</div>
+			
+			</div>
+
+		</section>
 	
 	</body>
 	

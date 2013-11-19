@@ -1,0 +1,51 @@
+@charset "UTF-8";
+
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+
+.container {
+	min-width: 800px;
+	width: 100%;	
+}
+
+.row {
+	width: 100%;
+	margin: 0;
+}
+
+.cp-left {
+	margin-left: 1%;
+	width: 12%;
+	min-width: 100px;
+	max-width: 200px; 
+	float: left;
+}
+
+.cp-right {
+	width: 84%;
+	min-width: 600px;
+	float: left;
+	margin-left: 2%;
+}
+
+/* Control Panel Header */
+
+.page-header {
+	margin: 0px;
+	padding-bottom: 0px;
+}
+
+.page-header h2 {
+	margin: 5px 0;
+}
+
+/* Sidebar Navigation */
+
+.sidebar-nav {
+	padding: 9px 0;
+}
+
+
+

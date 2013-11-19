@@ -21,7 +21,7 @@ public class AbstractView extends BeanToString {
 	 ****** Private constants ********
 	 ******************************* */
 	
-	private static final String DEFAULT_TITLE = "TUTS4U";
-	private static final String BASE_TITLE = "TUTS4U | ";
+	private static final String DEFAULT_TITLE = "TutsFlow";
+	private static final String BASE_TITLE = "TutsFlow | ";
 
 }

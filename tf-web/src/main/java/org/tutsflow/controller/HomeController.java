@@ -24,7 +24,7 @@ public class HomeController {
 		
 		HomeView view = HomeControllerHelper.createHomeView(request);
 		
-		return SpringUtils.createMv(Constants.JSP_HOME, Constants.VIEW, view);
+		return SpringUtils.createMv(Constants.TMPL_HOME, Constants.VIEW, view);
 	}
 	
 	

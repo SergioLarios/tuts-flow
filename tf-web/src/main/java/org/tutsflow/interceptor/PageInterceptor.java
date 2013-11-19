@@ -10,6 +10,7 @@ import org.tutsflow.constant.Constants;
 import org.tutsflow.constant.Mappings;
 import org.tutsflow.constant.StringPool;
 import org.tutsflow.session.Page;
+import org.tutsflow.web.UrlUtils;
 
 public class PageInterceptor implements HandlerInterceptor {
 
@@ -22,23 +23,36 @@ public class PageInterceptor implements HandlerInterceptor {
 		
 		HttpSession session = request.getSession();
 		
-		String conPath = request.getContextPath();
-		String uri = request.getRequestURI();
-		
-		if (conPath != StringPool.SLASH) {
-			uri = uri.replace(conPath, StringPool.BLANK);
-		}
+		String uri = UrlUtils.getUri(request);
 		
 		Page page = new Page();
+		
+		// Home
 		if (uri.equals(Mappings.HOME)){
 			page.setType(Page.HOME);
 		}
-		else if (uri.startsWith(Mappings.EXPLORE)) {
+		
+		// Explore
+		else if (uri.startsWith(Mappings.EXPLORE + StringPool.SLASH)) {
 			page.setType(Page.EXPLORE);
 		}
-		else if (uri.startsWith(Mappings.HOW_TO)) {
+		
+		// How to
+		else if (uri.startsWith(Mappings.HOW_TO + StringPool.SLASH)) {
 			page.setType(Page.HOW_TO);
 		}
+		
+		// Login
+		else if (uri.startsWith(Mappings.LOGIN + StringPool.SLASH)) {
+			page.setType(Page.LOG_IN);
+		}
+		
+		// Registrer
+		else if (uri.startsWith(Mappings.CREATE_ACCOUNT + StringPool.SLASH)) {
+			page.setType(Page.REGISTRER);
+		}
+		
+		// Other
 		else {
 			page.setType(Page.OTHER);
 		}

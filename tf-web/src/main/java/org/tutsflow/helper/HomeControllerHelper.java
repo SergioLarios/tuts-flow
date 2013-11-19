@@ -20,7 +20,6 @@ public class HomeControllerHelper {
 		HomeView view = new HomeView();
 		view.setLoginForm(new LoginForm());
 		view.setRegisterForm(new CreateAccountForm());
-		view.setHome(true);
 		if (user.getType() == UserConstants.GUEST) {
 			view.setLoggedIn(false);
 		}

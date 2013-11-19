@@ -6,15 +6,15 @@
 	
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		
-		<!-- *** CSS List *** -->
+		<!--/* CSS List/* -->
 		
 		<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
 		
-		<!-- *** JS List *** -->
+		<!--/* JS List/* -->
 		
 		<script type="text/javascript" th:src="@{/js/main.js}"></script>
 		
-		<!-- *** Title *** -->
+		<!--/* Title/* -->
 		
 		<title th:text="${view.title}"/>
 		
@@ -24,7 +24,7 @@
 	
 		<section class="header" th:fragment="header">
 	
-			<!-- *** Logo *** -->
+			<!--/* Logo/* -->
 			
 			<div class="header-logo">
 				<a th:href="@{${T(org.tutsflow.constant.Mappings).HOME}}">
@@ -32,26 +32,26 @@
 				</a>
 			</div>
 		
-			<!-- *** Navigation *** -->
+			<!--/* Navigation/* -->
 			
 			<nav class="header-nav">
 				<ul class="nav" th:with="pageType=${session.page.type}">
 
-					<!-- *** Home *** -->		
+					<!--/* Home/* -->		
 					
 					<li th:attr="class=${pageType == 0 ? 'active' : ''}">
 						<a th:href="@{${T(org.tutsflow.constant.Mappings).HOME}}" 
 							th:title="#{menu.home}" th:text="#{menu.home}"/>
 					</li>
 					
-					<!-- *** Explore *** -->
+					<!--/* Explore/* -->
 					
 					<li th:attr="class=${pageType == 1 ? 'active' : ''}">
 						<a th:href="@{${T(org.tutsflow.constant.Mappings).EXPLORE}}" 
 						   th:title="#{menu.explore}" th:text="#{menu.explore}"/>
 					</li>
 					
-					<!-- *** How to *** -->
+					<!--/* How to/* -->
 					
 					<li th:attr="class=${pageType == 2 ? 'active' : ''}">
 						<a th:href="@{${T(org.tutsflow.constant.Mappings).HOW_TO}}"
@@ -61,7 +61,7 @@
 				</ul>
 			</nav>
 			
-			<!-- *** User box *** -->
+			<!--/* User box/* -->
 			
 			<div class="user-box" th:with="user=${session.user}"
 				th:utext="${user.type} == 0 ? 
@@ -75,7 +75,7 @@
 					@{${T(org.tutsflow.constant.Mappings).USER}} +'/' + ${user.userNameSimple}
 				)}"/>		
 			
-			<!-- *** Search Box *** -->
+			<!--/* Search Box/* -->
 			
 			<form action="index.html" method="post" class="search">
 				<input type="text" placeholder="Search..." name="q"/>

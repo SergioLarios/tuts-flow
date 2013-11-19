@@ -24,6 +24,6 @@ public class HowToController {
 		
 		HowToView view = new HowToView();
 		
-		return SpringUtils.createMv(Constants.JSP_HOW_TO, Constants.VIEW, view);
+		return SpringUtils.createMv(Constants.TMPL_HOW_TO, Constants.VIEW, view);
 	}
 }

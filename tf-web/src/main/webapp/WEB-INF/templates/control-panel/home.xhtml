@@ -1,0 +1,75 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="header/cp-header :: html-head"/>
+	
+	<body>
+	
+		<div th:replace="header/cp-header :: header"/>
+	
+		<div class="container" th:with="
+			userSection = ${T(org.tutsflow.constant.ControlPanel).USER},
+			permissionSection = ${T(org.tutsflow.constant.ControlPanel).PERMISSION},
+			entrySection = ${T(org.tutsflow.constant.ControlPanel).ENTRY},
+			cpUrl = ${T(org.tutsflow.constant.Mappings).CONTROL_PANEL}
+		">
+			<div class="row" th:with="
+				isDefault = ${view.section == T(org.tutsflow.constant.ControlPanel).DEFAULT},
+				isUser = ${view.section eq userSection},
+				isPermission = ${view.section eq permissionSection},
+				isEntry = ${view.section eq entrySection}
+			">
+		
+				<!--/* Side bar */-->
+				
+				<div class="well sidebar-nav cp-left">
+					<ul class="nav nav-list">
+					
+						<!--/* Nav Header */-->
+							
+						<li class="nav-header" th:text="#{cp.tables}"/>
+						
+						<!--/* TBL : User */-->														
+						
+						<li th:attr="class=${isUser ? 'active' : ''}">
+							<a th:href="@{${cpUrl + '/' + userSection}}" th:text="#{cp.user}"/>
+						</li>
+						
+						<!--/* TBL : Premission */-->
+						
+						<li th:attr="class=${isPermission ? 'active' : ''}">
+							<a th:href="@{${cpUrl + '/' + permissionSection}}" th:text="#{cp.premission}"/>
+						</li>
+						
+						<!--/* TBL : Entry */-->
+						
+						<li th:attr="class=${isEntry ? 'active' : ''}">
+							<a th:href="@{${cpUrl + '/' + entrySection}}" th:text="#{cp.entry}"/>
+						</li>
+					
+					</ul>
+					
+				</div>
+			
+				<!--/* Content */-->
+				
+				<div class="cp-right">
+					
+					<div class="page-header">
+						<h1>Control Panel</h1>
+					</div>
+				
+					<h3>Subheader testing</h3>
+					
+					<p>bla lba ldla sblsld blsdbllsdfb</p>
+				
+				</div>
+			
+			</div>
+		</div>
+	
+	</body>
+	
+</html>
