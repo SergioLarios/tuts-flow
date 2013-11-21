@@ -17,6 +17,7 @@
 			</div>
 		
 			<div id="userDataTable"/>
+			<div id="userPagination"/>
 		
 			<!-- *************************** -->
 			<!--  JavaScript	             -->
@@ -31,9 +32,37 @@
 				var size = 5;
 				var table;
 				
+				// ***** Initial Render *****
+				
+				createPagination('#userPagination');
+				
+				// ***** END Initial Render *****
+				
+				// Pagination
+				
+				function createPagination(node){
+					
+					new Y.Pagination({
+						page: 1,
+						offset: 1,
+						total: 3,
+						circular: false,
+						strings: {
+				          next: '»',
+				          prev: '«'
+				        },
+				        after: {
+				        	changeRequest: function(event) {
+				        		findData(event.state.page - 1, size, '#userDataTable');
+				        	}
+				        }
+					}).render(node);
+					
+				}
+				
 				// Ajax call
 
-				function findData(inPage, inSize) {
+				function findData(inPage, inSize, node) {
 
 					var outData = null;
 
@@ -43,8 +72,17 @@
 							dataType: 'json',
 							on: {
 								success: function() {
-									createTable(this.get('responseData'));
-									table.render('#userDataTable');
+									
+									resData = this.get('responseData');
+									
+									if (!table) {
+										createTable(resData);
+										table.render(node);
+									}
+									else {
+										table.set('data', resData);
+									}
+									
 								}
 							}
 						}
@@ -52,7 +90,7 @@
 
 				}
 
-				// Data table
+				// Data table creation
 				
                 function createTable(inData) {
 					
@@ -78,10 +116,6 @@
                 	
 				}
 				
-				
-				// Render table
-				findData(page, size);
-                
 			});
 
 			/*]]>*/
