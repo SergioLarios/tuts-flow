@@ -2,6 +2,8 @@ package org.tutsflow.local.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.tutsflow.model.User;
 
 
@@ -31,6 +33,12 @@ public interface UserLocalService {
 	 * @return
 	 */
 	public List<User> findAll();
+	
+	/**
+	 * Returns all users paginated
+	 * @return
+	 */
+	public Page<User> findAll(Pageable pageable);
 	
 	/**
 	 * Returns a User given its simple name

@@ -10,6 +10,8 @@ import org.tutsflow.repository.UserRepository;
 import org.tutsflow.util.Validator;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,6 +38,10 @@ public class UserLocalServiceImpl implements UserLocalService {
 	
 	public List<User> findAll() {
 		return IteratorUtils.toList(userRepository.findAll().iterator());
+	}
+	
+	public Page<User> findAll(Pageable pageable) {
+		return userRepository.findAll(pageable);
 	}
 	
 	public User findByUserNameSimple(String userNameSimple) {

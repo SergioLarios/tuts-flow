@@ -1,0 +1,94 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<title>Control Panel : USER</title>
+	</head>
+	
+	<body>
+		<!--/* Content */-->
+		
+		<div th:fragment="main">
+			
+			<div class="page-header">
+				<h1 th:text="#{cp.user}"/>
+			</div>
+		
+			<div id="userDataTable"/>
+		
+			<!-- *************************** -->
+			<!--  JavaScript	             -->
+			<!-- *************************** -->
+		
+			<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+				
+			YUI().use('aui-datatable', 'aui-pagination', 'aui-io-request', function(Y) {
+                       
+				var page = 0;
+				var size = 5;
+				var table;
+				
+				// Ajax call
+
+				function findData(inPage, inSize) {
+
+					var outData = null;
+
+					Y.io.request(
+						[[@{${T(org.tutsflow.constant.Services).USER}}]] +'/' + inPage + '/' + inSize,
+						{
+							dataType: 'json',
+							on: {
+								success: function() {
+									createTable(this.get('responseData'));
+									table.render('#userDataTable');
+								}
+							}
+						}
+					);
+
+				}
+
+				// Data table
+				
+                function createTable(inData) {
+					
+                	table = new Y.DataTable({
+                        
+    					columns: [
+    						{ key: 'userName', label: 'Name' },
+    						{ key: 'userNameSimple', label: 'NameSimple' },
+    						{ key: 'mail', label: 'Mail' },
+    						{ key: 'type', label: 'Type', formatter:function(o){
+    							if (o.data.type === 2) {
+    								return 'admin';
+    							}
+    							else {
+    								return 'normal';
+    							}
+    							
+    						}}
+    					],
+    					data: inData
+    					
+    				});
+                	
+				}
+				
+				
+				// Render table
+				findData(page, size);
+                
+			});
+
+			/*]]>*/
+			</script>
+		
+		</div>
+	
+	</body>
+	
+</html>

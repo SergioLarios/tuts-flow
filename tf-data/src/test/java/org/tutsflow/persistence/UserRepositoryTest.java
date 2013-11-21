@@ -10,6 +10,8 @@ import org.tutsflow.model.User;
 import org.tutsflow.parent.DatabaseConectionTest;
 import org.tutsflow.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 public class UserRepositoryTest extends DatabaseConectionTest {
 	
@@ -37,6 +39,12 @@ public class UserRepositoryTest extends DatabaseConectionTest {
 		assertNotNull(user);
 		
 		userRepository.delete(user);
+		
+		Page<User> users = userRepository.findAll(new PageRequest(0, 5));
+		
+		for (User user2 : users.getContent()) {
+			System.out.println(user2.toJSONString());
+		}
 		
 	}
 	

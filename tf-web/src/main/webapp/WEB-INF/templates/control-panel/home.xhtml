@@ -22,7 +22,9 @@
 				isEntry = ${view.section eq entrySection}
 			">
 		
-				<!--/* Side bar */-->
+				<!-- *************************** -->
+				<!--  Sidebar Nav	             -->
+				<!-- *************************** -->
 				
 				<div class="well sidebar-nav cp-left">
 					<ul class="nav nav-list">
@@ -37,7 +39,7 @@
 							<a th:href="@{${cpUrl + '/' + userSection}}" th:text="#{cp.user}"/>
 						</li>
 						
-						<!--/* TBL : Premission */-->
+						<!--/* TBL : Permission */-->
 						
 						<li th:attr="class=${isPermission ? 'active' : ''}">
 							<a th:href="@{${cpUrl + '/' + permissionSection}}" th:text="#{cp.premission}"/>
@@ -53,18 +55,40 @@
 					
 				</div>
 			
-				<!--/* Content */-->
+				<!-- *************************** -->
+				<!--  Content		             -->
+				<!-- *************************** -->
+			
+				<!--/* Default Content */-->
 				
-				<div class="cp-right">
+				<div th:if="${isDefault}" class="cp-right">
 					
 					<div class="page-header">
-						<h1>Control Panel</h1>
+						<h1 th:text="#{cp.name}" />
 					</div>
 				
 					<h3>Subheader testing</h3>
 					
 					<p>bla lba ldla sblsld blsdbllsdfb</p>
 				
+				</div>
+				
+				<!--/* User Content */-->
+			
+				<div th:if="${isUser}" class="cp-right">
+					<div th:replace="control-panel/user :: main"/>
+				</div>
+				
+				<!--/* Permission Content */-->
+			
+				<div th:if="${isPermission}" class="cp-right">
+					<div th:replace="control-panel/permission :: main"/>
+				</div>
+
+				<!--/* Entry Content */-->
+			
+				<div th:if="${isEntry}" class="cp-right">
+					<div th:replace="control-panel/entry :: main"/>
 				</div>
 			
 			</div>
