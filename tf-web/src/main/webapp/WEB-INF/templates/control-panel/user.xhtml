@@ -70,7 +70,7 @@
 				
 				// Ajax call
 
-				function findData(inPage, inSize, node) {
+				function findData(inPage, inSize, node, setFirstSelected) {
 
 					var outData = null;
 
@@ -96,6 +96,11 @@
 										pagination.set('total', resData.totalPages);
 										pagination.set('page', inPage + 1);
 										
+										if (setFirstSelected) {
+											Y.one('ul.pagination-content li.pagination-control').addClass('disabled');
+											Y.all('ul.pagination-content li').item(1).addClass('active');
+										}
+
 									}
 
 								}
@@ -150,7 +155,7 @@
 					var dropDownPages = Y.Node.create(dropDown);
 					dropDownPages.on('change', function(event){
 						size = numPages[event.target.get('selectedIndex')];
-						findData(0, size, '#user-data-table');
+						findData(0, size, '#user-data-table', true);
 					});
 					Y.one('#user-pagination .pagination').placeAfter(dropDownPages);
 
