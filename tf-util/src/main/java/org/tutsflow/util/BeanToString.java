@@ -78,20 +78,51 @@ public abstract class BeanToString {
 		for (Field field : fields) {
 			
 			if (!Modifier.isFinal(field.getModifiers())) {
-			
+				
 				fieldObject = getFieldObject(clazz, field, obj);
-				if (isSonOfBeanToString(fieldObject) && field != null) {
-					sb.append(QUOTE + field.getName() + QUOTE + COLON);
+				
+				if (isCollection(field)) {
+
 					try {
-						Method meth = clazz.getMethod(TO_STRING_LITE, boolean.class);
-						sb.append(meth.invoke(fieldObject, true));
-					} catch (Exception e) {e.printStackTrace();
-						sb.append(fieldObject);
+						
+						Collection col = (Collection) fieldObject;
+						sb.append(QUOTE + field.getName() + QUOTE + COLON + OPEN_BRACKET);
+						int sz = col.size();
+						int cont = 1;
+						
+						for (Object object : col) {
+
+							if (isSonOfBeanToString(object)) {
+								sb.append(executeToStringLite(clazz, object));
+							}
+							else {
+								sb.append(object);
+							}
+							
+							if (cont < sz) {sb.append(COMMA);}
+							cont ++;
+						}
+						
+						sb.append(CLOSE_BRACKET);
+						
+					} catch (Exception e) {
+						jso.put(field.getName(), fieldObject);
 					}
+					
 				}
 				else {
-					jso.put(field.getName(), fieldObject);
+					
+					if (isSonOfBeanToString(fieldObject) && field != null) {
+						
+						sb.append(QUOTE + field.getName() + QUOTE + COLON);
+						sb.append(executeToStringLite(clazz, fieldObject));
+						
+					}
+					else {
+						jso.put(field.getName(), fieldObject);
+					}
 				}
+				
 			}
 			
 		}
@@ -102,12 +133,24 @@ public abstract class BeanToString {
 		else {
 			String prev = jso.toJSONString().substring(0, jso.toJSONString().length() -1) + COMMA;
 			String mid = sb.toString();
-			mid = mid.substring(0, mid.length() -1) + CLOSE_CURLY_BRACE;
+			if (mid.endsWith(COMMA)) {
+				mid = mid.substring(0, mid.length() -1) + CLOSE_CURLY_BRACE;
+			}
 			return prev + mid + CLOSE_CURLY_BRACE;
 		}
 		
 	}
 	
+	
+	private static Object executeToStringLite(Class clazz, Object fieldObject) {
+		
+		try {
+			return ((BeanToString)fieldObject).toStringLite();
+		} catch (Exception e) {e.printStackTrace();
+			return fieldObject;
+		}
+		
+	}
 	
 	private static Object[] recursiveString(Class clazz, Object obj, Field field, Object[] logObjs) {
 		
@@ -181,7 +224,7 @@ public abstract class BeanToString {
 	 * @return
 	 */
 	private static boolean isSonOfBeanToString(Object fieldObject) {
-		
+
 		try {
 			
 			if (fieldObject != null) {
@@ -362,6 +405,5 @@ public abstract class BeanToString {
 	private static final String IS = "is";
 	private static final String NULL = "null";
 	private static final String SEPARATOR = "_________";
-	private static final String TO_STRING_LITE = "toStringLite";
 	
 }

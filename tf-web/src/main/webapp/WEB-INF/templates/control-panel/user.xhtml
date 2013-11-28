@@ -15,10 +15,14 @@
 			<div class="page-header">
 				<h1 th:text="#{cp.user}"/>
 			</div>
-		
-			<div id="userDataTable"/>
-			<div id="userPagination"/>
-		
+			
+			<!--/* Data table */-->
+			
+			<div class="cp-table-wrapper">
+				<div id="user-data-table"/>
+				<div id="user-pagination" class="cp-table-bottom"/>
+			</div>
+			
 			<!-- *************************** -->
 			<!--  JavaScript	             -->
 			<!-- *************************** -->
@@ -26,15 +30,18 @@
 			<script type="text/javascript" th:inline="javascript">
 			/*<![CDATA[*/
 				
-			YUI().use('aui-datatable', 'aui-pagination', 'aui-io-request', function(Y) {
+			YUI().use('aui-datatable', 'aui-pagination', 'aui-io-request', 'aui-node', function(Y) {
                        
 				var page = 0;
 				var size = 5;
 				var table;
+				var pagination;
+				var numPages = [5, 10, 30, 100];
+				var pagesText;
 				
 				// ***** Initial Render *****
 				
-				createPagination('#userPagination');
+				createPagination('#user-pagination');
 				
 				// ***** END Initial Render *****
 				
@@ -42,18 +49,19 @@
 				
 				function createPagination(node){
 					
-					new Y.Pagination({
+					pagination = new Y.Pagination({
 						page: 1,
 						offset: 1,
 						total: 3,
 						circular: false,
 						strings: {
-				          next: '»',
-				          prev: '«'
+				          next: '>',
+				          prev: '<'
 				        },
 				        after: {
 				        	changeRequest: function(event) {
-				        		findData(event.state.page - 1, size, '#userDataTable');
+				        		page = event.state.page - 1;
+				        		findData(page, size, '#user-data-table');
 				        	}
 				        }
 					}).render(node);
@@ -76,13 +84,20 @@
 									resData = this.get('responseData');
 									
 									if (!table) {
-										createTable(resData);
+										pagesText = resData.pageText;
+										createTable(resData.data);
 										table.render(node);
 									}
 									else {
-										table.set('data', resData);
+										table.set('data', resData.data);
+										Y.one('#cp-table-pages-text').html(resData.pageText);
+
+										// loading pagination twice to select the page
+										pagination.set('total', resData.totalPages);
+										pagination.set('page', inPage + 1);
+										
 									}
-									
+
 								}
 							}
 						}
@@ -114,6 +129,36 @@
     					
     				});
                 	
+					createRowsPerPage();
+					setPagesText(Y.one('#cp-table-drop-down'));
+				}
+
+				function createRowsPerPage() {
+
+					var opts = '';
+					for (var i = 0; i < numPages.length; i++) {
+						var vl = numPages[i];
+						opts = opts + '<option value="' + vl + '">' + vl + '</option>';
+					};
+
+					var dropDown = 
+					'<select class="form-control input-sm page-drop-down" id="cp-table-drop-down">'+
+					'	' + opts +
+					'</select>';
+
+					// Node creation
+					var dropDownPages = Y.Node.create(dropDown);
+					dropDownPages.on('change', function(event){
+						size = numPages[event.target.get('selectedIndex')];
+						findData(0, size, '#user-data-table');
+					});
+					Y.one('#user-pagination .pagination').placeAfter(dropDownPages);
+
+				}
+
+				function setPagesText(inNode) {
+					var strText = '<div class="pages-text" id="cp-table-pages-text">' + pagesText + '</div>';
+					inNode.placeAfter(strText);
 				}
 				
 			});

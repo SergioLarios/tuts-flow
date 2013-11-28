@@ -47,5 +47,54 @@ body {
 	padding: 9px 0;
 }
 
+/* Control panel Table */
 
+.cp-table-wrapper {
+	box-shadow: 0 0px 2px rgba(0, 0, 0, 0.30);
+	width: 90%;
+	margin: 20px 0 0 20px;
+}
 
+.cp-table-wrapper .cp-table-bottom {
+	background: #F5F5F5;
+	border-top: 1px solid #DDDDDD;
+	padding-left: 7px;
+	padding-top: 6px;
+	height: 37px;
+}
+
+.cp-table-wrapper .pagination {
+	margin: 0;
+	float: left;
+}
+
+.cp-table-wrapper .pagination ul {
+	margin: 0;
+}
+
+.cp-table-wrapper .table {
+	margin-bottom: 0;
+}
+
+.cp-table-wrapper .table-table {
+	width: 100%;
+}
+
+.cp-table-wrapper .table-table .table-header {
+	background: #F5F5F5;
+}
+
+.cp-table-wrapper .page-drop-down {
+	float: left;
+	margin-left: 10px;
+	width: 60px;
+    text-indent: 0.01px;
+    text-overflow: '';
+    -moz-appearance: none;
+}
+
+.cp-table-wrapper .pages-text {
+	height: 20px;
+	margin: 6px 15px 0 0;
+	float: right;
+}

@@ -22,6 +22,15 @@
 	<jee:jndi-lookup id="dataSource" jndi-name="java:/comp/env/jdbc/tutsflow"/>
 
 	<!-- **************************************************************** -->
+	<!--  ANNOTATION CONFIG							                      -->
+	<!--  Packages to be scanned					                      -->
+	<!-- **************************************************************** -->
+	
+	<context:annotation-config/>
+	<context:component-scan base-package="org.tutsflow"/>
+
+
+	<!-- **************************************************************** -->
 	<!--  ENTITY MANAGER				                                  -->
 	<!-- **************************************************************** -->
 
