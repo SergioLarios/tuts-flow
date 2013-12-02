@@ -29,142 +29,29 @@
 		
 			<script type="text/javascript" th:inline="javascript">
 			/*<![CDATA[*/
+			           
+			YUI().use('cp-table', function(Y) {
 				
-			YUI().use('aui-datatable', 'aui-pagination', 'aui-io-request', 'aui-node', function(Y) {
-                       
-				var page = 0;
-				var size = 5;
-				var table;
-				var pagination;
-				var numPages = [5, 10, 30, 100];
-				var pagesText;
-				
-				// ***** Initial Render *****
-				
-				createPagination('#user-pagination');
-				
-				// ***** END Initial Render *****
-				
-				// Pagination
-				
-				function createPagination(node){
-					
-					pagination = new Y.Pagination({
-						page: 1,
-						offset: 1,
-						total: 3,
-						circular: false,
-						strings: {
-				          next: '>',
-				          prev: '<'
-				        },
-				        after: {
-				        	changeRequest: function(event) {
-				        		page = event.state.page - 1;
-				        		findData(page, size, '#user-data-table');
-				        	}
-				        }
-					}).render(node);
-					
-				}
-				
-				// Ajax call
-
-				function findData(inPage, inSize, node, setFirstSelected) {
-
-					var outData = null;
-
-					Y.io.request(
-						[[@{${T(org.tutsflow.constant.Services).USER}}]] +'/' + inPage + '/' + inSize,
-						{
-							dataType: 'json',
-							on: {
-								success: function() {
-									
-									resData = this.get('responseData');
-									
-									if (!table) {
-										pagesText = resData.pageText;
-										createTable(resData.data);
-										table.render(node);
-									}
-									else {
-										table.set('data', resData.data);
-										Y.one('#cp-table-pages-text').html(resData.pageText);
-
-										// loading pagination twice to select the page
-										pagination.set('total', resData.totalPages);
-										pagination.set('page', inPage + 1);
-										
-										if (setFirstSelected) {
-											Y.one('ul.pagination-content li.pagination-control').addClass('disabled');
-											Y.all('ul.pagination-content li').item(1).addClass('active');
-										}
-
-									}
-
-								}
+				var table = new Y.CpTable({
+					numPages: [1, 2, 5, 10, 30, 100],
+					dataTableId: '#user-data-table',
+					paginationId: '#user-pagination',
+					listUrl: [[@{${T(org.tutsflow.constant.Services).USER}}]],
+					columns: [
+						{ key: 'userName', label: 'Name' },
+						{ key: 'userNameSimple', label: 'NameSimple' },
+						{ key: 'mail', label: 'Mail' },
+						{ key: 'type', label: 'Type', formatter:function(o){
+							if (o.data.type === 2) {
+								return 'admin';
 							}
-						}
-					);
-
-				}
-
-				// Data table creation
-				
-                function createTable(inData) {
-					
-                	table = new Y.DataTable({
-                        
-    					columns: [
-    						{ key: 'userName', label: 'Name' },
-    						{ key: 'userNameSimple', label: 'NameSimple' },
-    						{ key: 'mail', label: 'Mail' },
-    						{ key: 'type', label: 'Type', formatter:function(o){
-    							if (o.data.type === 2) {
-    								return 'admin';
-    							}
-    							else {
-    								return 'normal';
-    							}
-    							
-    						}}
-    					],
-    					data: inData
-    					
-    				});
-                	
-					createRowsPerPage();
-					setPagesText(Y.one('#cp-table-drop-down'));
-				}
-
-				function createRowsPerPage() {
-
-					var opts = '';
-					for (var i = 0; i < numPages.length; i++) {
-						var vl = numPages[i];
-						opts = opts + '<option value="' + vl + '">' + vl + '</option>';
-					};
-
-					var dropDown = 
-					'<select class="form-control input-sm page-drop-down" id="cp-table-drop-down">'+
-					'	' + opts +
-					'</select>';
-
-					// Node creation
-					var dropDownPages = Y.Node.create(dropDown);
-					dropDownPages.on('change', function(event){
-						size = numPages[event.target.get('selectedIndex')];
-						findData(0, size, '#user-data-table', true);
-					});
-					Y.one('#user-pagination .pagination').placeAfter(dropDownPages);
-
-				}
-
-				function setPagesText(inNode) {
-					var strText = '<div class="pages-text" id="cp-table-pages-text">' + pagesText + '</div>';
-					inNode.placeAfter(strText);
-				}
+							else {
+								return 'normal';
+							}
+							
+						}}
+					]
+				}).render();
 				
 			});
 
