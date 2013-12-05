@@ -146,6 +146,7 @@ YUI.add('cp-table', function (Y) {
 								var engPags = localConf.total - (localConf.mid - 1);
 								
 								if (localConf.realPage > localConf.mid && localConf.realPage <= engPags) {
+									console.log('IF 1');
 									localConf.offset = inConf.realPage - (localConf.mid - 1);
 									localConf.pagination.set('offset', localConf.offset);
 									localConf.page = localConf.mid;
@@ -153,32 +154,35 @@ YUI.add('cp-table', function (Y) {
 									
 								}
 								else if (localConf.realPage > localConf.mid && localConf.realPage > engPags) {
+									console.log('IF 2');
 									localConf.offset = engPags - (localConf.mid - 1);
 									localConf.page = (localConf.realPage - engPags) + (localConf.mid);
-									localConf.pagination.set('page', localConf.page);
 									localConf.pagination.set('offset', localConf.offset);
+									localConf.pagination.set('page', localConf.page);
 								}
 								else {
+									console.log('IF 3');
 									localConf.offset = 1;
 									localConf.page = localConf.realPage;
 									localConf.pagination.set('offset', localConf.offset);
 									localConf.pagination.set('page', localConf.page);
 								}
 								
+
+								if (fromDrop) {
+									instance.firstLastPage();
+								}
+								
+								// Set selected page
 								if (localConf.table) {
 									
 									instance.noPageSelected();
 									
-									if (localConf.realPage > localConf.mid && localConf.realPage <= engPags) {
-										Y.all('ul.pagination-content li').item(localConf.page).addClass('active');
-									}
-									else {
-										Y.all('ul.pagination-content li').item(localConf.page + 1).addClass('active');
-									}
-									
 									if (!fromDrop) {
 										instance.firstLastPage();	
 									}
+									
+									Y.all('ul.pagination-content li').item(localConf.page + 1).addClass('active');
 									
 								}
 								
@@ -200,13 +204,12 @@ YUI.add('cp-table', function (Y) {
 								Y.one('#cp-table-pages-text').html(localConf.pagesText);
 							}
 							
-							if (fromDrop) {
-								instance.firstLastPage();
-							}
 							
 
-							// Selected pages
+							// Selected pages (First or last page)
 							if (inConf.realPage === 1 && localConf.offset === 1) {
+								
+								instance.noPageSelected();
 								
 								var ctrlLi = Y.all('ul.pagination-content li');
 								
@@ -224,7 +227,6 @@ YUI.add('cp-table', function (Y) {
 								
 							}
 							else if (localConf.total > localConf.maxPages && localConf.realPage === localConf.total) {
-								instance.noPageSelected();
 								var ctrlLi = Y.all('ul.pagination-content li');
 								ctrlLi.item(ctrlLi.size() - 1).addClass('disabled');
 								ctrlLi.item(ctrlLi.size() - 2).addClass('disabled');
