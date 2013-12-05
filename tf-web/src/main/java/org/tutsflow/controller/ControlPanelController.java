@@ -43,4 +43,16 @@ public class ControlPanelController {
 		return SpringUtils.createMv(Constants.TMPL_CP_HOME, Constants.VIEW, view);
 	}
 	
+	/* *******************************************************
+	 * *** Control Panel : "/control-panel/{section}/edit" ***
+	 * *******************************************************/
+	
+	@RequestMapping(value = Mappings.CP_SECTION_EDIT, method = RequestMethod.GET)  
+	public ModelAndView edit(@PathVariable String section,
+			HttpServletRequest request, HttpServletResponse response) {
+		
+		
+		return SpringUtils.createMv(ControlPanel.TMPL_USER_EDIT, Constants.VIEW, null);
+	}
+	
 }

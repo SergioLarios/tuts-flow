@@ -17,6 +17,7 @@ public class Mappings {
 	// Control panel
 	public static final String CONTROL_PANEL = "/control-panel";
 	public static final String CONTROL_PANEL_SECTION = CONTROL_PANEL + "/{section}";
+	public static final String CP_SECTION_EDIT = CONTROL_PANEL_SECTION + "/edit";
 	
 	// User credentials
 	public static final String LOGIN = "/login";
