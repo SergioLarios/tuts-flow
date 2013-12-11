@@ -31,12 +31,14 @@ YUI.add('cp-table', function (Y) {
 				var dataTableId = inConf.dataTableId;
 				var paginationId = inConf.paginationId;
 				var listUrl = inConf.listUrl;
+				var editUrl = inConf.editUrl;
 				var columns = inConf.columns;
 				var total = inConf.total;
 				var maxPages = inConf.maxPages;
 				var offset = inConf.offset;
 				var mid = inConf.mid;
 				var realPage = inConf.realPage;
+				var dataId = inConf.dataId;
 				
 				// Local variables
 				inConf.table = null;
@@ -48,8 +50,10 @@ YUI.add('cp-table', function (Y) {
 				if (!paginationId) { return false; }
 				if (!listUrl) { return false; }
 				if (!columns) { return false; }
+				if (!dataId){ return false; }
 				
 				// Default values
+				if (!editUrl) { inConf.editUrl = ''; }
 				if (!numPages) { inConf.numPages = [5, 10, 30, 100]; }
 				if (!page) { inConf.page = 1; }
 				if (!realPage) { inConf.realPage = 1; }
@@ -146,7 +150,7 @@ YUI.add('cp-table', function (Y) {
 								var engPags = localConf.total - (localConf.mid - 1);
 								
 								if (localConf.realPage > localConf.mid && localConf.realPage <= engPags) {
-									console.log('IF 1');
+
 									localConf.offset = inConf.realPage - (localConf.mid - 1);
 									localConf.pagination.set('offset', localConf.offset);
 									localConf.page = localConf.mid;
@@ -154,14 +158,14 @@ YUI.add('cp-table', function (Y) {
 									
 								}
 								else if (localConf.realPage > localConf.mid && localConf.realPage > engPags) {
-									console.log('IF 2');
+
 									localConf.offset = engPags - (localConf.mid - 1);
 									localConf.page = (localConf.realPage - engPags) + (localConf.mid);
 									localConf.pagination.set('offset', localConf.offset);
 									localConf.pagination.set('page', localConf.page);
 								}
 								else {
-									console.log('IF 3');
+									
 									localConf.offset = 1;
 									localConf.page = localConf.realPage;
 									localConf.pagination.set('offset', localConf.offset);
@@ -247,6 +251,38 @@ YUI.add('cp-table', function (Y) {
         	var instance = this;
 			var localConf = instance.conf;
 
+			// Tool Column
+			
+			if (localConf.editUrl) {
+				
+				var toolColumn = {
+					label: '&nbsp;',
+					allowHTML: true,
+					nodeFormatter: function (o) {
+
+						var eUrl = localConf.editUrl + '/' + o.data[localConf.dataId];
+						var editButton =  Y.Node.create(
+							'<a class="btn edit-entry" href="' + eUrl +'">' +
+							'	<i class="icon-file"></i>'+
+							'	Edit' +
+							'</a>');
+						
+						editButton.on('click', function(e){
+							e.preventDefault();
+							instance.callModal(eUrl);
+						});
+						
+						o.cell.insert(editButton);
+
+						return true;
+					}
+				};
+				
+				localConf.columns.push(toolColumn);
+			}
+			
+			// Table creation
+			
 			localConf.table = new Y.DataTable({
 
 				columns: localConf.columns,
@@ -354,8 +390,33 @@ YUI.add('cp-table', function (Y) {
 			
 		};
 		
+		// Call modal 
+		this.callModal = function(url) {
+			
+			Y.io.request(url, {
+					dataType: 'text/html',
+					on: {
+						success: function() {
+							var html = this.get('responseData');
+							var windowModal = new Y.Modal({
+								bodyContent: html,
+								headerContent: 'Edit',
+						        centered: true,
+						        modal: true
+							}).render();
+							
+							Y.one('#' + windowModal.get('id')).all('script').each(function(o) {
+								eval(o.get('text'));
+							});
 
+						}
+					}
+				}
+			);
+			
+		};
+		
 	};
 },'0.0.1', {
-	requires: ['aui-datatable', 'aui-pagination', 'aui-io-request', 'aui-node']
+	requires: ['aui-datatable', 'aui-pagination', 'aui-io-request', 'aui-node', 'aui-modal']
 });

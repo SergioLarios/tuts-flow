@@ -9,7 +9,9 @@
 	
 	<body>
 	
-		<!--/* Content */-->
+		<!-- *************************** -->
+		<!--  Content		             -->
+		<!-- *************************** -->
 		
 		<div th:fragment="main">
 			
@@ -24,30 +26,30 @@
 				<div id="user-pagination" class="cp-table-bottom"/>
 			</div>
 			
-			<!-- *************************** -->
-			<!--  JavaScript	             -->
-			<!-- *************************** -->
+			<!--/* Javascript: Datatable */-->
 		
-			<script type="text/javascript" th:inline="javascript">
+			<script type="text/javascript" th:inline="javascript" 
+					th:with="tUser=${T(org.tutsflow.constant.ControlPanel).USER}">
 			/*<![CDATA[*/
 			           
 			YUI().use('cp-table', function(Y) {
 				
 				var table = new Y.CpTable({
-					numPages: [1, 2, 5, 10, 30, 100],
 					dataTableId: '#user-data-table',
 					paginationId: '#user-pagination',
+					dataId: 'userId',
 					listUrl: [[@{${T(org.tutsflow.constant.Services).USER}}]],
+					editUrl: [[@{${T(org.tutsflow.constant.Mappings).CP_SECTION_EDIT + '/' + tUser}}]],
 					columns: [
-						{ key: 'userName', label: 'Name' },
-						{ key: 'userNameSimple', label: 'NameSimple' },
-						{ key: 'mail', label: 'Mail' },
-						{ key: 'type', label: 'Type', formatter:function(o){
+						{ key: 'userName', label: [[#{cp.user.name}]] },
+						{ key: 'userNameSimple', label: [[#{cp.user.name-simple}]] },
+						{ key: 'mail', label: [[#{cp.user.mail}]] },
+						{ key: 'type', label: [[#{cp.user.type}]], formatter:function(o){
 							if (o.data.type === 2) {
-								return 'admin';
+								return [[#{cp.user.type.2}]];
 							}
 							else {
-								return 'normal';
+								return [[#{cp.user.type.1}]];
 							}
 							
 						}}
@@ -59,13 +61,155 @@
 			/*]]>*/
 			</script>
 		
-		</div>
-		
-		<!--/* Edit */-->
+		</div>		
+	
+		<!-- *************************** -->
+		<!--  Edit			             -->
+		<!-- *************************** -->
 
 		<div th:fragment="edit">
-			<h1>EDIT !!</h1>
-		</div>
+
+			<form id="cp-user-edit" method="post" action="#" th:with="form=${view.userEditForm}"
+				  th:action="${T(org.tutsflow.constant.Mappings).CP_SECTION_EDIT}">
+
+				<div class="cp-box">
+
+					<!--/* Mail */-->
+		
+					<div class="control-group" 
+						 th:with="fMail=${T(org.tutsflow.controlpanel.form.UserEditForm).MAIL}">
+						 
+						<label class="control-label" th:attr="for=${fMail}" th:text="#{cp.user.mail}" />
+						
+						<div class="controls">
+							<input th:name="${fMail}" th:id="${fMail}" 
+								   type="text" th:value="${form.mail}" />
+						</div>
+						
+					</div>
+		
+					<!--/* Name */-->
+					
+					<div class="control-group" 
+						 th:with="fName=${T(org.tutsflow.controlpanel.form.UserEditForm).NAME}">
+						 
+						<label class="control-label" th:attr="for=${fName}" th:text="#{cp.user.name}" />
+						
+						<div class="controls">
+							<input th:name="${fName}" th:id="${fName}" 
+							   	   type="text" th:value="${form.name}" />
+						</div>
+						
+					</div>
+					
+					<!--/* Name simple */-->
+		
+					<div class="control-group" 
+						 th:with="fNameSimple=${T(org.tutsflow.controlpanel.form.UserEditForm).NAME_SIMPLE}">
+						 
+						<label class="control-label" th:attr="for=${fNameSimple}" th:text="#{cp.user.name-simple}" />
+						
+						<div class="controls">
+							<input th:name="${fNameSimple}" th:id="${fNameSimple}"
+								   type="text" th:value="${form.nameSimple}" />
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="cp-box">
+				
+					<!--/* Type */-->
+		
+					<div class="control-group" 
+						 th:with="fType=${T(org.tutsflow.controlpanel.form.UserEditForm).TYPE}">
+						 
+						<label class="control-label" th:attr="for=${fType}" th:text="#{cp.user.name}" />
+						
+						<div class="controls">
+							<input th:name="${fType}" th:id="${fType}" 
+								   type="text" th:value="${form.type}" />
+						</div>
+						
+					</div>
+					
+					<!--/* Password */-->
+		
+					<div class="control-group" 
+						 th:with="fPssw=${T(org.tutsflow.controlpanel.form.UserEditForm).PASSWORD}">
+						 
+						<label class="control-label" th:attr="for=${fPssw}" th:text="#{cp.user.pssw}" />
+						
+						<div class="controls">
+							<input th:name="${fPssw}" th:id="${fPssw}" 
+								   type="text" th:value="${form.pssw}" />
+						</div>
+						
+					</div>
+					
+					<!--/* Password repeat */-->
+		
+					<div class="control-group" 
+						 th:with="fPsswRepeat=${T(org.tutsflow.controlpanel.form.UserEditForm).PASSWORD_REPEAT}">
+						 
+						<label class="control-label" th:attr="for=${fPsswRepeat}" th:text="#{cp.user.pssw-rep}" />
+						
+						<div class="controls">
+							<input th:name="${fPsswRepeat}" th:id="${fPsswRepeat}" 
+								   type="text" th:value="${form.psswRepeat}" />
+						</div>
+						
+					</div>
+				
+				</div>
+	
+				<!--/* Buttons */-->
+	
+				<input class="btn btn-info" type="submit" value="Submit" />
+				<input class="btn btn-primary" type="reset" value="Reset" />
+				
+			</form>
+
+			<!--/* Javascript: Form validation */-->
+
+			<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			           
+			   YUI().use('aui-form-validator', function(Y) {
+				   
+				   var formId = 
+				   
+				   var rules = {
+						   
+					   cp_edit_usermail: {
+						   email: true, required: true
+					   },
+					   cp_edit_name: {
+						   required: true
+					   },
+					   cp_edit_name_simple: {
+						   required: true
+					   },
+					   cp_edit_password: {
+					   },
+					   cp_edit_password_repeat: {
+						   equalTo: '#cp_edit_password'
+					   }
+					   
+				   };
+				   
+				   new Y.FormValidator({
+					   boundingBox: '#cp-user-edit',
+					   rules: rules,
+				       showAllMessages: true
+				   });
+				   
+			   });
+			
+			/*]]>*/
+			</script>
+			
+		</div>	
 	
 	</body>
 	

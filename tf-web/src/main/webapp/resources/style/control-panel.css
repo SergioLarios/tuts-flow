@@ -98,3 +98,13 @@ body {
 	margin: 6px 15px 0 0;
 	float: right;
 }
+
+.cp-box {
+	float: left;
+	width: 50%;
+}
+
+.yui3-widget-mask {
+    background-color: #000000;
+    opacity: 0.4;
+}
