@@ -7,6 +7,7 @@ import org.tutsflow.constant.Constants;
 import org.tutsflow.constant.ControlPanel;
 import org.tutsflow.constant.Mappings;
 import org.tutsflow.controlpanel.helper.UserHelper;
+import org.tutsflow.controlpanel.validator.UserEditValidator;
 import org.tutsflow.controlpanel.view.UserEditView;
 import org.tutsflow.helper.ControlPanelControllerHelper;
 import org.tutsflow.local.service.UserLocalService;
@@ -57,7 +58,7 @@ public class ControlPanelController {
 		
 		// User
 		if (section.equals(ControlPanel.USER)) {
-			UserEditView view = UserHelper.createUserEditView(id, userLocalService);
+			UserEditView view = UserHelper.createUserEditView(id, userLocalService, null, null);
 			return SpringUtils.createMv(ControlPanel.TMPL_USER_EDIT, Constants.VIEW, view);
 		}
 		// Not found
@@ -75,8 +76,16 @@ public class ControlPanelController {
 	public ModelAndView saveEdit(@PathVariable String section, @PathVariable Long id,
 			HttpServletRequest request, HttpServletResponse response) {
 		
-		
-		return SpringUtils.createMv(ControlPanel.TMPL_USER_EDIT, Constants.VIEW, null);
+		// User
+		if (section.equals(ControlPanel.USER)) {
+			UserEditView view = UserHelper.createUserEditView(
+					id, userLocalService, userEditValidator, request);
+			return SpringUtils.createMv(ControlPanel.TMPL_USER_EDIT, Constants.VIEW, view);
+		}
+		// Not found
+		else {
+			return SpringUtils.createRedirect(Mappings.HTTP_404);
+		}
 	}
 	
 	/* *******************************
@@ -85,6 +94,9 @@ public class ControlPanelController {
 	
 	@Autowired
 	private UserLocalService userLocalService;
+	
+	@Autowired
+	private UserEditValidator userEditValidator;
 
 	/* *******************************
 	 ****** Setters & Getters ********
@@ -93,5 +105,9 @@ public class ControlPanelController {
 	public UserLocalService getUserLocalService() { return userLocalService; }
 	public void setUserLocalService(UserLocalService userLocalService) {
 		this.userLocalService = userLocalService; }
+
+	public UserEditValidator getUserEditValidator() { return userEditValidator; }
+	public void setUserEditValidator(UserEditValidator userEditValidator) { 
+		this.userEditValidator = userEditValidator; }
 	
 }

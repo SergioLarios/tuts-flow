@@ -14,33 +14,32 @@ import org.tutsflow.web.UrlUtils;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class CreateAccountFormValidator extends AbstractFormValidator{
+public class CreateAccountFormValidator extends AbstractFormValidator<CreateAccountForm> {
 
 	@Override
-	public void validate(Object form, HttpServletRequest req) {
-		CreateAccountForm caForm = (CreateAccountForm)form;
+	public void validate(CreateAccountForm form, HttpServletRequest req) {
 		
-		if (Validator.isBlank(caForm.getUserMail())) {
+		if (Validator.isBlank(form.getUserMail())) {
 			addError("caf.mail.null");
 		}
 		
-		if (Validator.isBlank(caForm.getUserName())) {
+		if (Validator.isBlank(form.getUserName())) {
 			addError("caf.name.null");
 		}
 		
-		if (Validator.isBlank(caForm.getPassword()) || Validator.isBlank(caForm.getPasswordRepeat())) {
+		if (Validator.isBlank(form.getPassword()) || Validator.isBlank(form.getPasswordRepeat())) {
 			addError("caf.pssw.blank");
 		}
 		
-		if (isValid() && !caForm.getPassword().equals(caForm.getPasswordRepeat())) {
+		if (isValid() && !form.getPassword().equals(form.getPasswordRepeat())) {
 			addError("caf.pssw.not-equal");
 		}
 		
-		if (isValid() && userLocalService.existsUserMail(caForm.getUserMail())) {
+		if (isValid() && userLocalService.existsUserMail(form.getUserMail())) {
 			addError("caf.user.exists");
 		}
 		
-		String userNameS = UrlUtils.simplifyStringToUrl(caForm.getUserName());
+		String userNameS = UrlUtils.simplifyStringToUrl(form.getUserName());
 		if (isValid() && userLocalService.existsUserNameSimple(userNameS)) {
 			addError("caf.user.exists");
 		}

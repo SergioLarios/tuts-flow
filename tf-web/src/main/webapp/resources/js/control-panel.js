@@ -3,7 +3,6 @@
 // *************** Control Panel JS ***************
 // ************************************************
 
-
 YUI.add('cp-table', function (Y) {
 
 	// ---------------------------------
@@ -81,7 +80,7 @@ YUI.add('cp-table', function (Y) {
 		this.render = function() {
 			var instance = this;
 			
-			if (this.checkConf()) {
+			if (instance.checkConf()) {
 				
 				// If the config is ok, the we'll render the datatable
 				instance.createPagination();
@@ -110,12 +109,12 @@ YUI.add('cp-table', function (Y) {
 		        		if (event.state.page > 0) {
 		        			localConf.page = event.state.page;
 			        		if (localConf.total > localConf.maxPages) {
-			        			inConf.realPage = localConf.offset + (localConf.page -1);
+			        			localConf.realPage = localConf.offset + (localConf.page -1);
 			        		}
 			        		else {
-			        			inConf.realPage = localConf.page;
+			        			localConf.realPage = localConf.page;
 			        		}
-			        		instance.findData(inConf.realPage, localConf.size);	
+			        		instance.findData(localConf.realPage, localConf.size);	
 		        		}
 		        	}
 		        }
@@ -393,30 +392,147 @@ YUI.add('cp-table', function (Y) {
 		// Call modal 
 		this.callModal = function(url) {
 			
+			var instance = this;
+			
 			Y.io.request(url, {
-					dataType: 'text/html',
-					on: {
-						success: function() {
-							var html = this.get('responseData');
-							var windowModal = new Y.Modal({
-								bodyContent: html,
-								headerContent: 'Edit',
-						        centered: true,
-						        modal: true
-							}).render();
-							
-							Y.one('#' + windowModal.get('id')).all('script').each(function(o) {
-								eval(o.get('text'));
-							});
+				dataType: 'text/html',
+				on: {
+					success: function() {
+						var html = this.get('responseData');
+						var windowModal = new Y.Modal({
+							bodyContent: html,
+							headerContent: 'Edit',
+					        centered: true,
+					        modal: true,
+					        destroyOnHide: true,
+					        on:{
+					        	destroy: function(){instance.refresh(instance);}
+					        }
+						}).render();
+						
+						Y.one('#' + windowModal.get('id')).all('script').each(function(o) {
+							eval(o.get('text'));
+						});
 
-						}
 					}
 				}
-			);
+			});
 			
+		};
+		
+		// Refresh
+		
+		this.refresh = function(instance) {
+			var localConf = instance.conf;
+    		instance.findData(localConf.realPage, localConf.size);	
 		};
 		
 	};
 },'0.0.1', {
 	requires: ['aui-datatable', 'aui-pagination', 'aui-io-request', 'aui-node', 'aui-modal']
+});
+
+
+YUI.add('cp-ajax-form', function (Y) {
+	
+	// ---------------------------------
+	// --    Object: CP Ajax Form     --
+	// ---------------------------------
+	
+	Y.CpAjaxForm = function(conf) {
+		
+		// Initial configuration
+
+		this.conf = conf;
+
+		// Check configuration
+
+		this.checkConf = function() {
+			
+			inConf = this.conf;
+			var isValidConf = true;
+
+			// inConf must != null
+			if (inConf) {
+				
+				// Parameters list
+				var rules = inConf.rules;
+				var formId = inConf.formId;
+				
+				// Validations
+				if (!rules) { return false; }
+				if (!formId) { return false; }
+				
+				// Default values
+				if (inConf.formId.startsWith('#')) {
+					inConf.formIdSelector = inConf.formId;
+				}
+				else {
+					inConf.formIdSelector = '#' + inConf.formId;
+				}
+				
+			}
+			else {
+				isValidConf = false;
+			}
+			
+			return isValidConf;
+			
+		};
+		
+		// Render
+		
+		this.render = function() {
+			
+			var instance = this;
+			var localConf = instance.conf;
+			
+			if (instance.checkConf()) {
+				
+				// Form validator
+				
+				new Y.FormValidator({
+					boundingBox: localConf.formIdSelector,
+					rules: localConf.rules,
+					showAllMessages: true
+				});
+				
+				// Resseting html
+				
+				var formSel = Y.one(localConf.formIdSelector);
+				
+				formSel.on('submit', function(e) {
+					e.preventDefault();
+					
+					Y.io.request(formSel.get('action'), {
+						method: 'POST',
+						dataType: 'text/html',
+						form: {
+							id: localConf.formId
+						},
+						on: {
+							success: function() {
+								var html = this.get('responseData');
+								
+								var parent = formSel.ancestors('div.modal-body');
+								parent.empty();
+								parent.html(html);
+								
+								parent.all('script').each(function(o) {
+									eval(o.get('text'));
+								});
+							}
+						}
+					});
+					
+				});
+				
+			}
+			
+		};
+		
+	};
+	
+},'0.0.1', {
+	requires: ['aui-io-request', 'aui-node', 'aui-form-validator', 'io-form']
 });

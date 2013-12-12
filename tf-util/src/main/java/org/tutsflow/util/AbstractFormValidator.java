@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-public abstract class AbstractFormValidator extends BeanToString {
+public abstract class AbstractFormValidator<T> extends BeanToString {
 
 	/* *******************************
 	 ********* Form Fields ***********
@@ -18,7 +18,7 @@ public abstract class AbstractFormValidator extends BeanToString {
 	 ************ Validate ***********
 	 ****************************** */
 	
-	public void validate(Object form, HttpServletRequest req) {
+	public void validate(T form, HttpServletRequest req) {
 		
 	}
 	

@@ -69,8 +69,31 @@
 
 		<div th:fragment="edit">
 
-			<form id="cp-user-edit" method="post" action="#" th:with="form=${view.userEditForm}"
-				  th:action="${T(org.tutsflow.constant.Mappings).CP_SECTION_EDIT}">
+			<form id="cp-user-edit" method="post" action="#" th:with="form=${view.userEditForm}" th:action="@{${view.actionUrl}}">
+
+				<!--/* Errors */-->
+			
+				<div th:if="${view.executed and !view.valid}" class="alert alert-error">
+					
+					<strong th:text="#{cp.form-errors}"/>
+				
+					<div th:each="error : ${view.errors}" th:text="#{${error}}"/>
+				
+				</div>
+
+				<!--/* Success */-->
+
+				<div th:if="${view.executed and view.valid}" class="alert alert-success">
+					
+					<strong th:text="#{cp.success}"/>
+					
+					<span th:text="#{cp.form-executed}"/>
+				
+				</div>
+
+				<!--/* Hidden */-->
+				
+				<input type="hidden" th:name="${T(org.tutsflow.controlpanel.form.UserEditForm).ID}" th:value="${form.id}" />
 
 				<div class="cp-box">
 
@@ -124,11 +147,13 @@
 					<div class="control-group" 
 						 th:with="fType=${T(org.tutsflow.controlpanel.form.UserEditForm).TYPE}">
 						 
-						<label class="control-label" th:attr="for=${fType}" th:text="#{cp.user.name}" />
+						<label class="control-label" th:attr="for=${fType}" th:text="#{cp.user.type}" />
 						
 						<div class="controls">
-							<input th:name="${fType}" th:id="${fType}" 
-								   type="text" th:value="${form.type}" />
+							<select  th:name="${fType}" th:id="${fType}" th:value="${form.type}">
+								<option value="1" th:text="#{cp.user.type.1}" th:selected="${form.type eq 1}"/>
+								<option value="2" th:text="#{cp.user.type.2}" th:selected="${form.type eq 2}"/>
+							</select>
 						</div>
 						
 					</div>
@@ -175,34 +200,36 @@
 			<script type="text/javascript" th:inline="javascript">
 			/*<![CDATA[*/
 			           
-			   YUI().use('aui-form-validator', function(Y) {
+			   YUI().use('cp-ajax-form', function(Y) {
 				   
-				   var formId = 
-				   
-				   var rules = {
-						   
-					   cp_edit_usermail: {
-						   email: true, required: true
-					   },
-					   cp_edit_name: {
-						   required: true
-					   },
-					   cp_edit_name_simple: {
-						   required: true
-					   },
-					   cp_edit_password: {
-					   },
-					   cp_edit_password_repeat: {
-						   equalTo: '#cp_edit_password'
-					   }
+				   var cpFormValidator = new Y.CpAjaxForm({
 					   
-				   };
-				   
-				   new Y.FormValidator({
-					   boundingBox: '#cp-user-edit',
-					   rules: rules,
-				       showAllMessages: true
-				   });
+					   // Form Id
+					   
+					   formId: 'cp-user-edit',
+					   
+					   // Rules
+					   
+					   rules : {
+						   
+						   cp_edit_usermail: {
+							   email: true, required: true
+						   },
+						   cp_edit_name: {
+							   required: true
+						   },
+						   cp_edit_name_simple: {
+							   required: true
+						   },
+						   cp_edit_password: {
+						   },
+						   cp_edit_password_repeat: {
+							   equalTo: '#cp_edit_password'
+						   }
+						   
+					   }
+
+				   }).render();
 				   
 			   });
 			

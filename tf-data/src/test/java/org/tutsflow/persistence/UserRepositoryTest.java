@@ -26,37 +26,37 @@ public class UserRepositoryTest extends DatabaseConectionTest {
 	@Test
 	public void userTests() {
 		
-//		String testString= String.valueOf(new Date().getTime());
-//		
-//		User user = new User();
-//		user.setUserName("testName-"+testString);
-//		user.setMail(testString +"@gmail.com");
-//		user.setUserId(Long.valueOf(testString));
-//		
-//		user  = userRepository.save(user);
-//		
-//		assertNotEquals(0, user.getUserId());
-//		
-//		long userId = user.getUserId();
-//		user = null;
-//		user = userRepository.findOne(userId);
-//		
-//		assertNotNull(user);
-//		
-//		userRepository.delete(user);
-//		
-//		Page<User> users = userRepository.findAll(new PageRequest(0, 5));
-//		
-//		for (User user2 : users.getContent()) {
-//			System.out.println(user2.toJSONString());
-//		}
+		String testString= String.valueOf(new Date().getTime());
+		
+		User user = new User();
+		user.setUserName("testName-"+testString);
+		user.setMail(testString +"@gmail.com");
+		user.setUserId(Long.valueOf(testString));
+		
+		user  = userRepository.save(user);
+		
+		assertNotEquals(0, user.getUserId());
+		
+		long userId = user.getUserId();
+		user = null;
+		user = userRepository.findOne(userId);
+		
+		assertNotNull(user);
+		
+		userRepository.delete(user);
+		
+		Page<User> users = userRepository.findAll(new PageRequest(0, 5));
+		
+		for (User user2 : users.getContent()) {
+			System.out.println(user2.toJSONString());
+		}
 		
 		int page = 0;
 		int size = 5;
 		
 		// User list
 		Page<User> usersP = userLocalService.findAll(new PageRequest(page, size));
-		List<User> users = usersP.getContent();
+		List<User> userss = usersP.getContent();
 
 		// Pages Text
 		int rowsTo = 0;
@@ -64,9 +64,11 @@ public class UserRepositoryTest extends DatabaseConectionTest {
 		else {rowsTo = size * page; }
 		int rowsFrom = (rowsTo - size) + 1;
 		
+		System.out.println("RowsFrom " + rowsFrom);
+		
 		// View creation
 		PaginationJsonView<User> output = new PaginationJsonView<>();
-		output.setData(users);
+		output.setData(userss);
 		output.setTotalEntries((int)usersP.getTotalElements());
 		output.setTotalPages(usersP.getTotalPages());
 		output.setPageText("Rows 1 to 5 | 3");

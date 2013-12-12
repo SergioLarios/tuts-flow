@@ -9,6 +9,9 @@ public class UserEditForm extends BeanToString {
 	 ********* Form Fields ***********
 	 ****************************** */
 	
+	@Param(name= ID)
+	private long id;
+	
 	@Param(name = MAIL)
 	private String mail;
 	
@@ -32,6 +35,7 @@ public class UserEditForm extends BeanToString {
 	 ********* Form Names ************
 	 ****************************** */
 	
+	public static final String ID = "cp_edit_id";
 	public static final String MAIL = "cp_edit_usermail";
 	public static final String NAME = "cp_edit_name";
 	public static final String NAME_SIMPLE = "cp_edit_name_simple";
@@ -60,5 +64,8 @@ public class UserEditForm extends BeanToString {
 	
 	public String getPsswRepeat() { return psswRepeat; }
 	public void setPsswRepeat(String psswRepeat) { this.psswRepeat = psswRepeat; }
+	
+	public long getId() { return id; }
+	public void setId(long id) { this.id = id; }
 	
 }

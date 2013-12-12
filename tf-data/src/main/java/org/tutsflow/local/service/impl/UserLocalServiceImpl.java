@@ -75,33 +75,11 @@ public class UserLocalServiceImpl implements UserLocalService {
 	}
 
 	public boolean existsUserNameSimple(String userNameSimple) {
-		boolean exists = true;
-		
-		try {
-			
-			User user = userRepository.findByUserNameSimple(userNameSimple);
-			if (Validator.isNull(user)) {
-				return false;
-			}
-			
-		} catch (Exception e) {
-			log.error("Error on -existsUserNameSimple(String userNameSimple)- ", e);
-		}
-		
-		return exists;
+		return userRepository.existsBySimpleName(userNameSimple);
 	}
 	
 	public boolean existsUserMail(String userMail) {
-		boolean exists = true;
-		try {
-			User user = userRepository.findByMail(userMail);
-			if (Validator.isNull(user)) {
-				exists = false;
-			}
-		} catch (Exception e) {
-			log.error("Error on -existsUserMail(String userMail)- ", e);
-		}
-		return exists;
+		return userRepository.existsByMail(userMail);
 	}
 	
 	public User loginUser(String userMail) {

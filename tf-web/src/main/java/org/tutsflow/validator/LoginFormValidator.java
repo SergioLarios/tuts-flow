@@ -13,21 +13,20 @@ import org.tutsflow.util.Validator;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class LoginFormValidator extends AbstractFormValidator {
+public class LoginFormValidator extends AbstractFormValidator<LoginForm> {
 
 	@Override
-	public void validate(Object form, HttpServletRequest req) {
-		LoginForm lForm = (LoginForm)form;
+	public void validate(LoginForm form, HttpServletRequest req) {
 		
-		if (Validator.isBlank(lForm.getUserMail())) {
+		if (Validator.isBlank(form.getUserMail())) {
 			addError("lf.mail.blank");
 		}
 		
-		if (Validator.isBlank(lForm.getPassword())) {
+		if (Validator.isBlank(form.getPassword())) {
 			addError("lf.pssw.blank");
 		}
 		
-		if (isValid() && !userLocalService.checkPssw(lForm.getUserMail(), lForm.getPassword()))  {
+		if (isValid() && !userLocalService.checkPssw(form.getUserMail(), form.getPassword()))  {
 			addError("lf.not-match");
 		}
 		
