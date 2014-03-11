@@ -3,7 +3,7 @@ package org.tutsflow.startup;
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
-import org.tutsflow.data.PermissionTypes;
+import org.tutsflow.constant.PermissionConstants;
 import org.tutsflow.local.service.PermissionLocalService;
 import org.tutsflow.model.Permission;
 import org.tutsflow.model.id.PermissionId;
@@ -23,7 +23,7 @@ public class ServerStartup {
 	@PostConstruct
 	public void start() {
 		
-		PermissionId permissionId = new PermissionId("/control-panel/", PermissionTypes.PAGE);
+		PermissionId permissionId = new PermissionId("/control-panel/", PermissionConstants.TYPE_MAPPING);
 		
 		Permission controlPanelPermission = permissionLocalService.findById(permissionId);
 

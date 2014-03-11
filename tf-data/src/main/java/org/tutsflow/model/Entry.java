@@ -12,7 +12,7 @@ import org.tutsflow.util.BeanToString;
 
 @Entity
 @Table(name = "ENTRY_")
-public class Entry extends BeanToString{
+public class Entry extends BeanToString {
 
 	/* *******************************
 	 ******** Table Fields ***********
